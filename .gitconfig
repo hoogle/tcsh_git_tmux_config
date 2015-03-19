@@ -1,0 +1,44 @@
+[alias]
+    st = status
+    rb = svn rebase
+    ci = commit -a
+    co = checkout
+    br = branch
+    sub = submodule
+    la = log --pretty=\"format:%ad %h (%an): %s\" --date=short
+
+[pager]
+    diff =
+
+[diff]
+    color = auto
+    external = /home/richard_wang/git_diff_wrapper
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    ui = auto
+
+[status]
+    color = auto
+
+[branch]
+    color = auto
+
+[merge]
+    tool = araxismerge
+
+[mergetool "araxismerge"]
+    cmd = "/usr/bin/compare -3 -merge -wait $LOCAL $BASE $REMOTE $MERGED"
+    path = /usr/bin/
+
+[http]
+    sslverify = false
+
+[user]
+    name = Richard Wang
+    email = richard_wang@miiicasa.com
+
+[push]
+	default = tracking

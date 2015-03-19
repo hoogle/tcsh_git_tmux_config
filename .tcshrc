@@ -1,0 +1,88 @@
+alias ll	ls -lA
+alias cp    cp -i
+alias mv    mv -i
+alias rm    rm -i
+alias vi    vim
+alias vim "env TERM=xterm-color vim"
+alias cdwww cd /home/richard_wang/miiitv/
+alias gohoogle "ssh -p 9999 laudieh@localhost"
+alias genlang "php ~/miiicasa/cms/cli.php l10n/lang/script_gen \$2"
+alias gendoc "php ~/miiicasa/cms/cli.php tools/doc_manage/gen \$2"
+alias parse "\$1 \$2 | xargs -L 1 php ~/miiicasa/cms/cli.php l10n/l10n/update_lang_to_db "
+#alias restart "sudo service apache2 restart"
+
+# A righteous umask
+umask 22
+
+set autolist
+set autoexpand
+
+set path = (/home/richard_wang/bin /sbin /bin /usr/sbin /usr/bin /usr/games /usr/local/bin/node /usr/local/lib/node /usr/local/lib/node/lib/node /usr/local/sbin /usr/local/bin /usr/X11R6/bin /home/m/bin /usr/share/pear $HOME/bin)
+
+set awk_cmd = '{if($1 == "both"){gsub($1,"")}}1 {$1=$1}1 {if($1 == "modified:"){gsub($1,"")}}1'
+alias phpl "git st | grep '.php' | awk '$awk_cmd' | xargs -L 1 php -l"
+
+#setenv DEV_ROOT /home/dev/richard_wang/
+#setenv SITE_ENV "develop"
+#setenv API_PORT 50030
+#setenv DEVELOPER_PORT 50030
+#setenv DEV_PORT 50030
+setenv CI_ENV "development"
+
+setenv LANG en_US.UTF-8
+setenv LC_ALL en_US.UTF-8
+
+setenv  TERM  xterm-color
+setenv	EDITOR	vim
+setenv  VISUAL  vim
+setenv	PAGER	more
+setenv	BLOCKSIZE	K
+
+setenv  LC_CTYPE C
+
+setenv  CLICOLOR
+setenv  LSCOLORS  exfxcxdxbxegedabagacad
+#setenv  LSCOLORS  Dxfxcxdxbxegedabagacad
+set dspmbyte="big5"
+
+if ($?prompt) then
+	# An interactive shell -- set some stuff up
+	#set prompt = "`hostname -s`# "
+    #set prompt = "%{^[[1;31m%}[`/bin/hostname`]%{^[[1;32m%}`whoami` %{^[[1;33m%}%~%{^[[0m%} > "
+    setenv GIT_BRANCH_CMD "sh -c 'git branch --no-color 2> /dev/null' | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'"
+    alias precmd 'set prompt = "%{^[[1;31m%}[AWS-devm5]%{^[[1;32m%}`whoami` %{^[[1;33m%}%~%{^[[0m%} %{^[[0;31m%}`$GIT_BRANCH_CMD`%{^[[0m%} > "'
+	set filec
+	set history = 100
+	set savehist = 100
+	set mail = (/var/mail/$USER)
+	if ( $?tcsh ) then
+		bindkey "^W" backward-delete-word
+		bindkey -k up history-search-backward
+		bindkey -k down history-search-forward
+	endif
+endif
+
+set autologout=0
+
+set SSH_ENV = "$HOME/.ssh/environment"
+unset SSH_AGENT_RUNNING
+if (-f $SSH_ENV) then
+    source $SSH_ENV
+    ps $SSH_AGENT_PID > /dev/null && set SSH_AGENT_RUNNING
+endif
+if ($?prompt && ! $?SSH_AGENT_RUNNING) then
+    echo "Initializing SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' >! $SSH_ENV
+    chmod 600 $SSH_ENV
+    source $SSH_ENV
+    echo "done: ssh-agent is now running, PID $SSH_AGENT_PID"
+    /usr/bin/ssh-add
+endif
+
+# source git-completion
+source ~/.git-completion.tcsh
+setenv GIT_PS1_SHOWDIRTYSTATE true
+setenv GIT_PS1_SHOWSTASHSTATE true
+setenv GIT_PS1_SHOWUNTRACKEDFILES true
+setenv GIT_PS1_SHOWUPSTREAM "auto"
+
